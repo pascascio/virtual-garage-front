@@ -18,7 +18,7 @@ function App() {
     const token = localStorage.getItem('authToken');
 
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/admin/${selectedCarId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/admin/${selectedCarId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ function App() {
     
 
       try {
-        const response = await fetch("http://localhost:3000/api/v1/auth/login", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ function App() {
     //handles submission of sign up form 
     async function handleSignUp(data){
       try {
-        const response = await fetch("http://localhost:3000/api/v1/auth/register", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -132,8 +132,8 @@ function App() {
     const userData = JSON.parse(localStorage.getItem('user'));
 
     //admins have access to all cars, clients have access to their cars only 
-    const adminUrl = "http://localhost:3000/api/v1/admin";
-    let url = "http://localhost:3000/api/v1/cars";
+    const adminUrl = `${import.meta.env.VITE_API_URL}/api/v1/admin`;
+    let url = `${import.meta.env.VITE_API_URL}/api/v1/cars`;
 
     if(userData.role === 'admin'){
        url = adminUrl;
@@ -219,7 +219,7 @@ function App() {
     const token = localStorage.getItem('authToken');
    
     try {
-      const response = await fetch("http://localhost:3000/api/v1/cars", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/cars`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -266,7 +266,7 @@ function App() {
     const token = localStorage.getItem('authToken');
 
     try{
-      const response = await fetch(`http://localhost:3000/api/v1/cars/${id}`, 
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/cars/${id}`, 
         {
           method: "DELETE",
           headers: {
