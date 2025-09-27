@@ -1,0 +1,283 @@
+@import "tailwindcss";
+
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+}
+
+
+*{
+  box-sizing:border-box;
+}
+body{
+  background-color:rgb(184, 184, 189);
+  margin:0;
+  padding:0;
+}
+
+main{
+  height: 100vh;
+  margin-top: 32px;
+  margin-bottom:32px;
+  display:flex;
+  gap:2rem;
+}
+
+.page-header{
+  background: #a24e48;
+  margin:0;
+  width: 100%;
+  height: 70px;
+  position: fixed;
+  top:0;
+  left:0;
+  z-index: 1000;
+
+}
+
+footer{
+  background-color: rgb(48, 48, 55);
+  color:#a24e48;
+  height:50px;
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom:0;
+  left:0;
+  z-index:100;
+
+}
+
+nav{ 
+display: flex;
+justify-content: space-between;
+ align-items: center;
+ color: rgb(48, 48, 55)
+}
+
+.logo h1{
+  font-size: 2.5em;
+  margin: 10px 0px 10px 0px;
+}
+
+.menu:not(.add-car-menu) {
+margin: 0; 
+padding:0;
+ list-style: none;
+ display: flex;
+
+}
+
+.menu li:not(.add-car-menu li){
+  margin-left:20px;
+  border-bottom: 0.5px solid #213547;
+  padding: 5px;
+
+}
+
+li:hover:not(.add-car-menu li){
+  color: white;
+  border-bottom: solid white;
+}
+
+
+
+header a{
+  color:#213547;
+}
+
+aside{
+  background-color: #a24e48;
+  width: 20%;
+  padding: 64px 32px;
+  border-top-right-radius: 0.75rem; /* 12px */
+  border-bottom-right-radius: 0.75rem; /* 12px */
+  margin-left:0;
+  margin-top:90px;
+  position:relative;
+}
+
+
+
+aside h2{
+  margin-bottom: 32px;
+  color:rgb(48, 48, 55);
+}
+
+.form-message-container{
+background-color:#c6c6c6;
+ margin-bottom:50px;
+ padding: 50px;
+ border-radius: 20px 20px 20px;
+}
+
+.log-in-message{
+  margin-bottom: 50px;
+}
+
+.log-in{
+  padding:25px;
+}
+
+.form-container{
+  display: flex; 
+  flex-direction: column; 
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+form{
+  margin-top: 200px;
+  margin-bottom: 200px;
+  background-color: #a24e48;
+  padding: 20px;
+  border-radius: 20px 20px 20px;
+  color:#213547;
+  height: fit-content;
+  width: fit-content;
+  box-shadow: 8.0px 16.0px 16.0px hsl(0deg 0% 0% / 0.25);
+}
+
+form label{
+  font-weight:bold;
+}
+
+form input{
+  padding: 8px; 
+  width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border:none;
+  border-bottom: 1px solid rgb(214, 214, 214);
+  background-color: #a24e48
+}
+
+button[type="submit"], button {
+  background: rgb(214  214 214 / 55%);
+  margin: 0px auto;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  color: rgb(48, 48, 55);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  text-align: center;
+  border-radius:15px;
+}
+
+button:hover{
+  background:rgb(227, 221, 221);
+}
+
+.form-actions{
+  font-size: small;
+}
+
+
+
+.redirect-login{
+  border:none;
+  background:none;
+  color: rgb(48, 48, 55)
+}
+
+.redirect-login:hover{
+  color: white;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+
+
+.add-car-container{
+  width:35rem;
+  margin-top:16px;
+  margin-left: 200px;
+}
+
+.add-car-form {
+  display:flex;
+  flex-direction: column; 
+  gap: 1;
+  margin-top:16px;
+  margin-bottom:16px;
+}
+.add-car-form label{ 
+  font-size: small;
+  text-transform: uppercase;
+  font-weight:bold;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  color: rgb(48,48,55);
+}
+
+
+
+
+.add-car-form textarea, input{
+  width:100%;
+  padding: .25rem;
+  background-color:rgb(184, 184 ,189 );
+  border:none;
+  border-bottom:0.5px solid rgb(48, 48, 55);
+  box-sizing:border-box;
+}
+
+.add-car-menu{
+  display:flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap:4;
+  margin-top:20px;
+  margin-bottom: 16px;
+  list-style: none;
+
+}
+
+.no-car-selected{
+display: flex;
+flex-direction: column; 
+justify-content: center;
+width:50%;
+margin:auto;
+}
+
+
+.no-car-selected img{
+  width: 4rem;
+  height: 4rem;
+  object-fit:contain;
+  margin:auto;
+
+}
+
+.no-car-selected h2, p {
+  color: rgb(48, 48, 55)
+}
+
+.error li{
+  color: red;
+  padding: 0 1rem;
+}
+
+.cars-sidebar{
+  width:100%;
+  text-align: left;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem; 
+  padding-bottom: .25rem;
+  border-radius: 0.125rem;
+  margin-top: .25rem; 
+  margin-bottom: .25rem;
+  color: rgb(48, 48, 55);
+  list-style:none;
+}
