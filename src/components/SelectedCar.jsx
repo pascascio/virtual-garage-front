@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 export default function SelectedCar({car, onDeleteCar, onEditCar, user}){
 
     const [technicianComments, setTechnicianComments] = useState(car.technicianComments || "" );
-    const [isEdition, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
       setTechnicianComments(car.technicianComments || "");
