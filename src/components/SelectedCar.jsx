@@ -3,17 +3,17 @@ import React, { useState, useEffect } from "react";
 export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
   const [technicianComments, setTechnicianComments] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [currentCarId, setCurrentCarId] = useState(null);
 
-  // Initialize comments when car loads or changes, but only if not editing
+  // Initialize comments only when a new car is selected and not editing
   useEffect(() => {
-    if (car && !isEditing) {
+    if (car && car.id !== currentCarId && !isEditing) {
       setTechnicianComments(car.technicianComments || "");
+      setCurrentCarId(car.id);
     }
-  }, [car, isEditing]);
+  }, [car, currentCarId, isEditing]);
 
-  const handleChange = (e) => {
-    setTechnicianComments(e.target.value);
-  };
+  const handleChange = (e) => setTechnicianComments(e.target.value);
 
   const handleSave = () => {
     onEditCar(car.id, { technicianComments });
@@ -25,9 +25,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
     setIsEditing(false);
   };
 
-  if (!car) {
-    return <p>Loading car details...</p>;
-  }
+  if (!car) return <p>Loading car details...</p>;
 
   return (
     <div className="bg-stone-400 p-8 rounded-md">
