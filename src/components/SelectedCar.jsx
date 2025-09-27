@@ -1,10 +1,14 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 export default function SelectedCar({car, onDeleteCar, onEditCar, user}){
 
     const [technicianComments, setTechnicianComments] = useState(car.technicianComments || "" );
+
+    useEffect(() => {
+      setTechnicianComments(car.technicianComments || "");
+    }, [car]);
 
     function handleCommentChange(e){
         setTechnicianComments(e.target.value);
