@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 
 export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
-  const [technicianComments, setTechnicianComments] = useState(car.technicianComments || "");
+  const [technicianComments, setTechnicianComments] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  // Update state only if the car prop changes
+  // Initialize comments when car loads or changes, but only if not editing
   useEffect(() => {
-    setTechnicianComments(car.technicianComments || "");
-  }, [car]);
+    if (car && !isEditing) {
+      setTechnicianComments(car.technicianComments || "");
+    }
+  }, [car, isEditing]);
 
   const handleChange = (e) => {
     setTechnicianComments(e.target.value);
@@ -22,6 +24,10 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
     setTechnicianComments(car.technicianComments || "");
     setIsEditing(false);
   };
+
+  if (!car) {
+    return <p>Loading car details...</p>;
+  }
 
   return (
     <div className="bg-stone-400 p-8 rounded-md">
