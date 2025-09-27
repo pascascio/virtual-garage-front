@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 export default function SelectedCar({car, onDeleteCar, onEditCar, user}){
 
     const [technicianComments, setTechnicianComments] = useState(car.technicianComments || "" );
+    const [isEdition, setIsEditing] = useState(false);
 
     useEffect(() => {
       setTechnicianComments(car.technicianComments || "");
@@ -44,30 +45,39 @@ export default function SelectedCar({car, onDeleteCar, onEditCar, user}){
   <h2 className="text-xl font-bold mb-4 text-stone-100">Technician Comments</h2>
 
   {user.role === "admin" ? (
-    technicianComments ? (
-      <p>{technicianComments}</p>
-    ) : (
-      <div>
-        <textarea
-          className="bg-stone-200 w-120 h-50"
-          placeholder="Enter comments here..."
-          value={technicianComments}
-          onChange={handleCommentChange}
-        ></textarea>
-        <button
-          className="px-4 py-2 text-sm font-medium rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950"
-          onClick={() => {
-            console.log("Save clicked!", car.id, technicianComments);
-            onEditCar(car.id, { technicianComments });
-          }}
-        >
-          Save
-        </button>
-      </div>
-    )
+  isEditing ? (
+    <div>
+      <textarea
+        className="bg-stone-200 w-120 h-50"
+        placeholder="Enter comments here..."
+        value={technicianComments}
+        onChange={handleCommentChange}
+      ></textarea>
+      <button
+        className="px-4 py-2 text-sm font-medium rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950"
+        onClick={() => {
+          onEditCar(car.id, { technicianComments });
+          setIsEditing(false);
+        }}
+      >
+        Save
+      </button>
+    </div>
   ) : (
-    <p>{car.technicianComments ? car.technicianComments : "Nothing to see here..."}</p>
-  )}
+    <div>
+      <p>{technicianComments || "Nothing to see here..."}</p>
+      <button
+        className="px-4 py-2 text-sm font-medium rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950"
+        onClick={() => setIsEditing(true)}
+      >
+        Edit Comments
+      </button>
+    </div>
+  )
+) : (
+  <p>{car.technicianComments || "Nothing to see here..."}</p>
+)}
+
 </div>
 
         </div>
