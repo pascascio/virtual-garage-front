@@ -3,33 +3,27 @@ import React, { useState, useEffect } from "react";
 export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
   const [technicianComments, setTechnicianComments] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [currentCarId, setCurrentCarId] = useState(null);
 
-  // Initialize comments only when a new car is selected and not editing
+  // Initialize comments whenever a new car is selected
   useEffect(() => {
-    if (car && car.id !== currentCarId && !isEditing) {
+    if (car) {
       setTechnicianComments(car.technicianComments || "");
-      setCurrentCarId(car.id);
+      setIsEditing(false);
     }
-  }, [car, currentCarId, isEditing]);
+  }, [car]);
 
-  const handleChange = (e) => setTechnicianComments(e.target.value);
+  if (!car) return <p>No car selected.</p>;
 
   const handleSave = () => {
     onEditCar(car.id, { technicianComments });
     setIsEditing(false);
   };
 
-  const handleCancel = () => {
-    setTechnicianComments(car.technicianComments || "");
-    setIsEditing(false);
-  };
-
-  if (!car) return <p>Loading car details...</p>;
-
   return (
     <div className="bg-stone-400 p-8 rounded-md">
-      <h2 className="text-xl font-bold mb-4 text-stone-100">Technician Comments</h2>
+      <h2 className="text-xl font-bold mb-4 text-stone-100">
+        Technician Comments
+      </h2>
 
       {user.role === "admin" ? (
         isEditing ? (
@@ -37,7 +31,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
             <textarea
               className="bg-stone-200 w-full h-32 p-2 rounded-md"
               value={technicianComments}
-              onChange={handleChange}
+              onChange={(e) => setTechnicianComments(e.target.value)}
             />
             <div className="flex gap-2">
               <button
@@ -48,7 +42,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                onClick={handleCancel}
+                onClick={() => setIsEditing(false)}
               >
                 Cancel
               </button>
