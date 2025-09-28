@@ -3,14 +3,15 @@ import React, { useState, useEffect } from "react";
 export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
   const [technicianComments, setTechnicianComments] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [currentCarId, setCurrentCarId] = useState(null);
 
-  // Initialize comments whenever a new car is passed in
+  // Initialize comments when a new car is selected
   useEffect(() => {
-    if (car) {
+    if (car && car.id !== currentCarId && !isEditing) {
       setTechnicianComments(car.technicianComments || "");
-      setIsEditing(false);
+      setCurrentCarId(car.id);
     }
-  }, [car]);
+  }, [car, currentCarId, isEditing]);
 
   const handleChange = (e) => setTechnicianComments(e.target.value);
 
@@ -27,7 +28,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
   if (!car) return <p>Loading car details...</p>;
 
   return (
-    <div className="bg-stone-400 p-8 rounded-md w-full max-w-xl">
+    <div className="bg-stone-400 p-8 rounded-md w-full max-w-2xl">
       <h2 className="text-xl font-bold mb-4 text-stone-100">Technician Comments</h2>
 
       {user.role === "admin" ? (
