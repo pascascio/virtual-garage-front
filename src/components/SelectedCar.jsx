@@ -4,7 +4,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
   const [technicianComments, setTechnicianComments] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  // Initialize comments whenever a new car is selected
+  // Initialize comments whenever a new car is passed in
   useEffect(() => {
     if (car) {
       setTechnicianComments(car.technicianComments || "");
@@ -12,18 +12,23 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
     }
   }, [car]);
 
-  if (!car) return <p>No car selected.</p>;
+  const handleChange = (e) => setTechnicianComments(e.target.value);
 
   const handleSave = () => {
     onEditCar(car.id, { technicianComments });
     setIsEditing(false);
   };
 
+  const handleCancel = () => {
+    setTechnicianComments(car.technicianComments || "");
+    setIsEditing(false);
+  };
+
+  if (!car) return <p>Loading car details...</p>;
+
   return (
-    <div className="bg-stone-400 p-8 rounded-md">
-      <h2 className="text-xl font-bold mb-4 text-stone-100">
-        Technician Comments
-      </h2>
+    <div className="bg-stone-400 p-8 rounded-md w-full max-w-xl">
+      <h2 className="text-xl font-bold mb-4 text-stone-100">Technician Comments</h2>
 
       {user.role === "admin" ? (
         isEditing ? (
@@ -31,7 +36,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
             <textarea
               className="bg-stone-200 w-full h-32 p-2 rounded-md"
               value={technicianComments}
-              onChange={(e) => setTechnicianComments(e.target.value)}
+              onChange={handleChange}
             />
             <div className="flex gap-2">
               <button
@@ -42,7 +47,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                onClick={() => setIsEditing(false)}
+                onClick={handleCancel}
               >
                 Cancel
               </button>
