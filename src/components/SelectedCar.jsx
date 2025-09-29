@@ -33,7 +33,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
    statusClasses += " bg-sky-400/75"
   }else if(car.status === "awaiting"){
    statusClasses += " bg-red-500"
-  }else if(car.status === "complete"){
+  }else if(car.status === "repair-complete"){
    statusClasses += " bg-green-500/75"
   }else if(car.status === "pending"){
    statusClasses += " bg-yellow-500/75"
@@ -96,15 +96,6 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
         )
       ) : (
         <p className="text-stone-100">{technicianComments || "No comments available."}</p>
-      )}
-
-      {user.role === "admin" && (
-        <button
-          className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md"
-          onClick={() => onDeleteCar(car.id)}
-        >
-          Delete Car
-        </button>
       )}
     </div>
     </div>  
