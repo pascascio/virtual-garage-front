@@ -27,7 +27,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
 
   if (!car) return <p>Loading car details...</p>;
 
-  let statusClasses = "text-transform: capitalize px-6 py-2 md:text-base rounded-md text-stone-50 mb-4";
+  let statusClasses = "capitalize px-6 py-2 md:text-base rounded-md text-stone-50 mb-4";
 
   if(car.status === "reviewing" || car.status === "in-progress"){
    statusClasses += " bg-sky-400/75"
