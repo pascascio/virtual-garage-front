@@ -1,63 +1,122 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Sidebar from "./components/Sidebar";
 import NewCar from "./components/NewCar";
-import NoCarSelected from './components/NoCarSelected';
-import SelectedCar from './components/SelectedCar';
-import AdminDashboard from './components/Dashboard';
-import Landing from './components/Landing';
+import NoCarSelected from "./components/NoCarSelected";
+import SelectedCar from "./components/SelectedCar";
+import AdminDashboard from "./components/Dashboard";
+import Landing from "./components/Landing";
 
 function App() {
+  // -------------------- USER & AUTH --------------------
   const [userData, setUserData] = useState(null);
-  const [authScreen, setAuthScreen] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authScreen, setAuthScreen] = useState(""); // 'login' | 'signup'
 
+  // -------------------- CARS STATE --------------------
   const [carsState, setCarsState] = useState({
-    selectedCarId: undefined,
-    cars: []
+    selectedCarId: undefined, // undefined = no car selected
+    cars: [],
   });
 
-  // ------------------ FETCH CARS ------------------
+  const selectedCar = carsState.cars.find((car) => car.id === carsState.selectedCarId);
+
+  // -------------------- AUTH FUNCTIONS --------------------
+  async function handleLogin(data) {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const { token, user } = await response.json();
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        setIsLoggedIn(true);
+        setUserData(user);
+        alert("Login successful!");
+      } else {
+        const errorData = await response.json();
+        alert(`Login failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      alert("Error during login:", error);
+    }
+  }
+
+  async function handleSignUp(data) {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setUserData(data);
+        alert("Signup successful!");
+      } else {
+        const errorData = await response.json();
+        alert(`Signup failed: ${errorData.message}`);
+      }
+      setAuthScreen("login");
+    } catch (error) {
+      alert("Error during signup:", error);
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setAuthScreen("login");
+    setCarsState({ selectedCarId: undefined, cars: [] });
+  }
+
+  const handleLogInClick = () => setAuthScreen("login");
+  const handleSignUpClick = () => setAuthScreen("signup");
+
+  // -------------------- FETCH CARS --------------------
   async function getCars() {
-    const token = localStorage.getItem('authToken');
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem("authToken");
+    const userDataLocal = JSON.parse(localStorage.getItem("user"));
+    if (!userDataLocal) return;
 
-    if (!storedUser) return;
-
-    const url = storedUser.role === 'admin'
-      ? `${import.meta.env.VITE_API_URL}/api/v1/admin`
-      : `${import.meta.env.VITE_API_URL}/api/v1/cars`;
+    const url =
+      userDataLocal.role === "admin"
+        ? `${import.meta.env.VITE_API_URL}/api/v1/admin`
+        : `${import.meta.env.VITE_API_URL}/api/v1/cars`;
 
     try {
       const response = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
         const carsList = await response.json();
-        const normalizedCars = carsList.cars.map(car => ({
-          ...car,
-          id: car._id?.toString() || car.id?.toString(),
-        }));
-
-        setCarsState(prev => ({
-          ...prev,
+        const normalizedCars = carsList.cars.map((car) => ({ ...car, id: car._id || car.id }));
+        console.log("Fetched cars:", normalizedCars);
+        setCarsState((prevState) => ({
+          ...prevState,
           cars: normalizedCars,
-          // keep current selection if any
+          // preserve currently selected car if still exists
+          selectedCarId:
+            prevState.selectedCarId &&
+            normalizedCars.some((c) => c.id === prevState.selectedCarId)
+              ? prevState.selectedCarId
+              : undefined,
         }));
-        console.log('Fetched cars:', normalizedCars);
       } else {
         const errorData = await response.json();
-        console.error('Error fetching cars:', errorData.message);
+        console.error(errorData.message);
       }
     } catch (error) {
-      console.error('Error fetching cars:', error);
+      console.error("Error fetching cars:", error);
     }
   }
 
@@ -65,114 +124,152 @@ function App() {
     if (isLoggedIn) getCars();
   }, [isLoggedIn]);
 
-  // ------------------ CAR HANDLERS ------------------
+  // -------------------- CAR FUNCTIONS --------------------
   const handleSelectCar = (id) => {
-    setCarsState(prev => ({ ...prev, selectedCarId: id.toString() }));
+    setCarsState((prevState) => ({ ...prevState, selectedCarId: id }));
   };
 
   const handleStartAddCar = () => {
-    setCarsState(prev => ({ ...prev, selectedCarId: null }));
+    setCarsState((prevState) => ({ ...prevState, selectedCarId: null }));
   };
 
   const handleCancelAddCar = () => {
-    setCarsState(prev => ({ ...prev, selectedCarId: undefined }));
+    setCarsState((prevState) => ({ ...prevState, selectedCarId: undefined }));
   };
 
   const handleAddCar = async (carData) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/cars`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(carData),
       });
 
       if (response.ok) {
-        alert('Car added successfully!');
+        alert("Car successfully added!");
         await getCars();
       } else {
         const errorData = await response.json();
         alert(`Error adding car: ${errorData.message}`);
       }
     } catch (error) {
-      alert('Error adding car:', error);
+      alert("Error adding car:", error);
     }
   };
 
   const handleDeleteCar = async (id) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/cars/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
-        setCarsState(prev => ({
-          ...prev,
-          cars: prev.cars.filter(car => car.id !== id),
-          selectedCarId: undefined
+        setCarsState((prevState) => ({
+          ...prevState,
+          cars: prevState.cars.filter((car) => car.id !== id),
+          selectedCarId: undefined,
         }));
-        alert('Car deleted!');
+        alert("Car deleted!");
       } else {
         const errorData = await response.json();
         alert(`Error deleting car: ${errorData.message}`);
       }
     } catch (error) {
-      alert('Error deleting car:', error);
+      alert("Error deleting car:", error);
     }
   };
 
-  const handleEditCar = async (id, updatedFields) => {
-    const token = localStorage.getItem('authToken');
+  const handleEditCar = async (selectedCarId, updatedFields) => {
+    const token = localStorage.getItem("authToken");
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/admin/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(updatedFields),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/admin/${selectedCarId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify(updatedFields),
+        }
+      );
 
       if (response.ok) {
-        setCarsState(prev => ({
-          ...prev,
-          cars: prev.cars.map(car => car.id === id ? { ...car, ...updatedFields } : car),
+        setCarsState((prevState) => ({
+          ...prevState,
+          cars: prevState.cars.map((car) =>
+            car.id === selectedCarId ? { ...car, ...updatedFields } : car
+          ),
         }));
-        alert('Car updated!');
+        alert("Car successfully updated!");
       } else {
         const errorData = await response.json();
         alert(`Error updating car: ${errorData.message}`);
       }
     } catch (error) {
-      alert('Error editing car:', error);
+      alert("Error editing car:", error);
     }
   };
 
-  // ------------------ SELECTED CAR ------------------
-  const selectedCar = carsState.cars.find(
-    car => car.id.toString() === carsState.selectedCarId?.toString()
-  );
-
-  // ------------------ RENDER LOGIC ------------------
+  // -------------------- RENDER LOGIC --------------------
   let content;
 
-  if (!isLoggedIn && authScreen === 'signup') content = <Signup onLoginClick={() => setAuthScreen('login')} onSubmit={handleSignUp} />;
-  else if (!isLoggedIn && authScreen === 'login') content = <Login onLogin={handleLogin} onSignUpClick={() => setAuthScreen('signup')} />;
-  else if (!isLoggedIn) content = <Landing onLoginClick={() => setAuthScreen('login')} onSignUpClick={() => setAuthScreen('signup')} />;
-  else if (isLoggedIn && carsState.selectedCarId === null) content = <NewCar onAdd={handleAddCar} onCancel={handleCancelAddCar} user={userData} />;
-  else if (isLoggedIn && carsState.selectedCarId !== undefined && carsState.selectedCarId !== null) content = <SelectedCar car={selectedCar} onDeleteCar={handleDeleteCar} onEditCar={handleEditCar} user={userData} />;
-  else if (isLoggedIn && userData.role === 'admin' && carsState.cars.length > 0) content = <AdminDashboard cars={carsState.cars} userData={userData} onSelectCar={handleSelectCar} onStartAddCar={handleStartAddCar} onEditCar={handleEditCar} />;
-  else content = <NoCarSelected onStartAddCar={handleStartAddCar} />;
+  if (!isLoggedIn && authScreen === "signup") {
+    content = <Signup onLoginClick={handleLogInClick} onSubmit={handleSignUp} />;
+  } else if (!isLoggedIn && authScreen === "login") {
+    content = <Login onLogin={handleLogin} onSignUpClick={handleSignUpClick} />;
+  } else if (!isLoggedIn) {
+    content = <Landing onLoginClick={handleLogInClick} onSignUpClick={handleSignUpClick} />;
+  } else if (isLoggedIn && carsState.selectedCarId === null) {
+    content = <NewCar onAdd={handleAddCar} onCancel={handleCancelAddCar} user={userData} />;
+  } else if (isLoggedIn && carsState.selectedCarId !== undefined && carsState.selectedCarId !== null) {
+    content = (
+      <SelectedCar
+        car={selectedCar}
+        onDeleteCar={handleDeleteCar}
+        onEditCar={handleEditCar}
+        user={userData}
+      />
+    );
+  } else if (isLoggedIn && userData.role === "admin" && carsState.cars.length > 0) {
+    content = (
+      <AdminDashboard
+        cars={carsState.cars}
+        userData={userData}
+        onSelectCar={handleSelectCar}
+        onStartAddCar={handleStartAddCar}
+        onEditCar={handleEditCar}
+      />
+    );
+  } else {
+    content = <NoCarSelected onStartAddCar={handleStartAddCar} />;
+  }
 
-  // ------------------ JSX ------------------
+  // -------------------- JSX --------------------
   return (
     <div className="flex flex-col min-h-screen">
-      <Header onLoginClick={() => setAuthScreen('login')} onSignUpClick={() => setAuthScreen('signup')} isLoggedIn={isLoggedIn} onLogout={() => { localStorage.clear(); setIsLoggedIn(false); setUserData(null); }} />
+      <Header
+        onLoginClick={handleLogInClick}
+        onSignUpClick={handleSignUpClick}
+        isLoggedIn={isLoggedIn}
+        onLogout={handleLogout}
+      />
       <div className="flex flex-1 overflow-hidden mt-6 mb-6">
-        {isLoggedIn && userData?.role !== 'admin' && <Sidebar cars={carsState.cars} onSelectCar={handleSelectCar} onStartAddCar={handleStartAddCar} />}
+        {isLoggedIn && userData.role !== "admin" && (
+          <Sidebar
+            onStartAddCar={handleStartAddCar}
+            cars={carsState.cars}
+            onSelectCar={handleSelectCar}
+          />
+        )}
         <main className="flex-1 p-6 overflow-y-auto bg-white flex items-center justify-center">
-          <div className="w-full max-w-4xl">
-            <h1 className="font-bold text-xl text-stone-500">{isLoggedIn && `Welcome back to your garage, ${userData?.name?.split(" ")[0] || ''}!`}</h1>
-            <p className="mb-6 font-light text-stone-400">{isLoggedIn && "Manage cars and see progress here"}</p>
+          <div className="w-full">
+            <h1 className="font-bold text-xl text-stone-500 mb-2">
+              {isLoggedIn && `Welcome back to your garage, ${userData?.name.split(" ")[0] || ""}!`}
+            </h1>
+            <p className="mb-6 font-light text-stone-400">
+              {isLoggedIn && "Manage cars and see progress here"}
+            </p>
             {content}
           </div>
         </main>
