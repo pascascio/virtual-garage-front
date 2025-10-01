@@ -98,7 +98,7 @@ if(car.status === "reviewing" || car.status === "in-progress"){
                 <tr key = {car.id} className= "bg-white border-b border-gray-200 hover:bg-stone-200">
                     <td className= "px-6 py-4"><div className = {statusClasses}>
                     <form className="max-w-sm mx-auto">
-  <label htmlForfor="status" ></label>
+  <label htmlFor="status" ></label>
   <select id="status" defaultValue = {car.status} onChange={(e) => {
   const newStatus = e.target.value;
   onEditCar(car.id, { status: newStatus });
