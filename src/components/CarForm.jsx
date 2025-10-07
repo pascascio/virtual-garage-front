@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function CarForm({ user, onAdd, onEdit, car, onCancel }) {
+export default function CarForm({ user, onAdd, onEditCar, car, onCancel }) {
   const [formData, setFormData] = useState({
     year: "",
     make: "",
@@ -30,7 +30,7 @@ export default function CarForm({ user, onAdd, onEdit, car, onCancel }) {
     e.preventDefault();
     if (car) {
       // ✅ Editing existing car
-      onEdit(car.id, formData);
+      onEditCar(car.id, formData);
     } else {
       // ✅ Adding new car
       onAdd(formData);

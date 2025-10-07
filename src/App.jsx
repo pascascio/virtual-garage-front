@@ -9,6 +9,7 @@ import NoCarSelected from "./components/NoCarSelected";
 import SelectedCar from "./components/SelectedCar";
 import AdminDashboard from "./components/Dashboard";
 import Landing from "./components/Landing";
+import ClientDashboard from "./components/ClientDashboard";
 
 function App() {
   // -------------------- USER & AUTH --------------------
@@ -234,7 +235,7 @@ function App() {
   } else if (!isLoggedIn) {
     content = <Landing onLoginClick={handleLogInClick} onSignUpClick={handleSignUpClick} />;
   } else if (isLoggedIn && carsState.selectedCarId === null) {
-    content = <CarForm onAdd={handleAddCar} onCancel={handleCancelAddCar} user={userData} />;
+    content = <CarForm onAdd={handleAddCar} onCancel={handleCancelAddCar} user={userData} onEditCar = {handleEditCar} />;
   } else if (isLoggedIn && carsState.selectedCarId !== undefined && carsState.selectedCarId !== null) {
     content = (
       <SelectedCar
@@ -255,7 +256,8 @@ function App() {
       />
     );
   } else {
-    content = <NoCarSelected onStartAddCar={handleStartAddCar} />;
+    //content = <NoCarSelected onStartAddCar={handleStartAddCar} />;
+    content = <ClientDashboard onSelectCar = {handleSelectCar} onEditCar = {handleEditCar} cars = {carsState.cars} onStartAddCar = {handleStartAddCar}/>
   }
 
   // -------------------- JSX --------------------
