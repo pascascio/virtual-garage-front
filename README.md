@@ -1,11 +1,11 @@
-# 🚗 Virtual Garage (Frontend)
+#  Virtual Garage
 CRM web app for auto-repair shops — built with React, Vite, and Tailwind CSS.
 
 
 ## Getting Started
 npm install && npm run dev
 
-## ✨ Features
+## Features
 
 * Login and Signup forms with validation
 
@@ -17,7 +17,7 @@ npm install && npm run dev
 
 * Responsive layout built with Tailwind CSS
 
-## 🧩 Main Components
+## Main Components
 
 * Login.jsx — User login
 
@@ -31,7 +31,7 @@ npm install && npm run dev
 
 * NewCar.jsx — Add car form
 
-## 🧠 Tech Stack
+## Tech Stack
 
 * React
 
