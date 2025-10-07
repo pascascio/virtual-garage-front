@@ -2,43 +2,43 @@
 CRM web app for auto-repair shops — built with React, Vite, and Tailwind CSS.
 
 
-Getting Started
+## Getting Started
 npm install && npm run dev
 
-✨ Features
+## ✨ Features
 
-Login and Signup forms with validation
+* Login and Signup forms with validation
 
-Dashboard view of all client cars
+* Dashboard view of all client cars
 
-Select a car to view details and repair history
+* Select a car to view details and repair history
 
-Add or edit car information
+* Add or edit car information
 
-Responsive layout built with Tailwind CSS
+* Responsive layout built with Tailwind CSS
 
-🧩 Main Components
+## 🧩 Main Components
 
-Login.jsx — User login
+* Login.jsx — User login
 
-Signup.jsx — New user registration
+* Signup.jsx — New user registration
 
-Sidebar.jsx — Dashboard navigation
+* Sidebar.jsx — Dashboard navigation
 
-ClientDashboard.jsx — Displays all cars
+* ClientDashboard.jsx — Displays all cars
 
-SelectedCar.jsx — Detailed car view
+* SelectedCar.jsx — Detailed car view
 
-NewCar.jsx — Add car form
+* NewCar.jsx — Add car form
 
-🧠 Tech Stack
+## 🧠 Tech Stack
 
-React
+* React
 
-Vite
+* Vite
 
-Tailwind CSS
+* Tailwind CSS
 
-Node.js / Express (API)
+* Node.js / Express (API)
 
-MongoDB (Database)
+* MongoDB (Database)
