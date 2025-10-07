@@ -1,5 +1,6 @@
 import { useActionState, useRef } from "react";
 import Modal from './Modal'
+import logo from '/logo.png'
 
 import {
   isNotEmpty, 
@@ -59,15 +60,21 @@ export default function Signup({onLoginClick, onSubmit}){
     formState.errors = null;
   }
   
-  let labelClasses = "mb-1 text-sm  text-stone-200 font-light"
-  let inputClasses = "mb-6 w-full p-1 border-b border-stone-500 bg-stone-800  text-stone-200 focus:outline-none focus:border-stone-600"
+  let labelClasses = "mb-1 text-sm  text-stone-800 font-light"
+  let inputClasses = "mb-6 w-full p-1 border-b border-stone-500 bg-stone-200  text-stone-800 focus:outline-none focus:border-stone-600"
 
     return(
-      <div className = "bg-stone-800 flex flex-col min-h-full justify-center px-6 py-12 text-stone-200 rounded-md" >
+      <div flex flex-col >
+        <div className = "p-10 h-60 w-full bg-linear-to-r from-stone-600 to-stone-800 ">
+        <img src = {logo} alt = "virtual garage logo" className = "h-20 w-20 object-center"/>
+        <h1 className = "text-4xl text-stone-200 font-bold mb-2">Join Virtual Garage</h1>
+        <p className = "text-stone-300">Start building your digital garage today</p>
+        </div>
+      <div className = "bg-stone-200 flex flex-col min-h-full justify-center px-6 py-12 text-stone-200 rounded-md" >
         <form action = {formAction} noValidate  className = "flex flex-col gap-4 ">
         <div  className = "flex flex-col  p-6">
-        <h2 className = "mb-6 text-center text-2xl font-light">Welcome to the Garage </h2>
-        <p className = "mb-8 text-center">We just need a little bit of data from you to get started!</p>
+        <h2 className = "text-stone-800 mb-2 text-center text-xl font-semibold">Welcome to the Garage </h2>
+        <p className = "text-stone-800 mb-8 text-center font-light">Fill in your details to get started</p>
 
         <div className="control-row">
           <div className="control">
@@ -109,10 +116,10 @@ export default function Signup({onLoginClick, onSubmit}){
         
   
   <div>
-          <button type="submit" className = "font-light px-4 py-2 mx-1  mb-10 md:text-base rounded-md bg-stone-200 text-stone-800 hover:bg-stone-500 hover:text-stone-200">
+          <button type="submit" className = "font-light px-4 py-2 mx-1  mb-10 md:text-base rounded-md bg-stone-800 text-stone-200 hover:bg-stone-500 hover:text-stone-200">
             Sign Up
           </button>
-          <p className = "text-xs font-semibold uppercase text-center">Already have an account? <button className = "text-stone-400 hover:text-stone-200 font-semibold uppercase" onClick = {onLoginClick}>Log In</button></p>
+          <p className = "text-xs font-semibold uppercase text-center text-stone-800">Already have an account? <button className = "text-stone-400 hover:text-stone-800 font-semibold uppercase" onClick = {onLoginClick}>Log In</button></p>
   </div>
   </div>
   <Modal ref = {modal}>
@@ -129,5 +136,6 @@ export default function Signup({onLoginClick, onSubmit}){
 
         </form>
         </div>
+       </div>
     )
 }

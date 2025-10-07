@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Sidebar from "./components/Sidebar";
-import NewCar from "./components/NewCar";
+import CarForm from "./components/CarForm";
 import NoCarSelected from "./components/NoCarSelected";
 import SelectedCar from "./components/SelectedCar";
 import AdminDashboard from "./components/Dashboard";
@@ -124,6 +124,19 @@ function App() {
     if (isLoggedIn) getCars();
   }, [isLoggedIn]);
 
+
+  function handleHomeClick(){
+    setCarsState((prevState) => ({
+      ...prevState,
+      selectedCarId: undefined,
+    }));
+  }
+
+  function handleLogoClick(){
+    setIsLoggedIn(false);
+    setAuthScreen("");
+  }
+
   // -------------------- CAR FUNCTIONS --------------------
   const handleSelectCar = (id) => {
     setCarsState((prevState) => ({ ...prevState, selectedCarId: id }));
@@ -221,7 +234,7 @@ function App() {
   } else if (!isLoggedIn) {
     content = <Landing onLoginClick={handleLogInClick} onSignUpClick={handleSignUpClick} />;
   } else if (isLoggedIn && carsState.selectedCarId === null) {
-    content = <NewCar onAdd={handleAddCar} onCancel={handleCancelAddCar} user={userData} />;
+    content = <CarForm onAdd={handleAddCar} onCancel={handleCancelAddCar} user={userData} />;
   } else if (isLoggedIn && carsState.selectedCarId !== undefined && carsState.selectedCarId !== null) {
     content = (
       <SelectedCar
@@ -253,6 +266,8 @@ function App() {
         onSignUpClick={handleSignUpClick}
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
+        onHomeClick = {handleHomeClick}
+        onLogoClick={handleLogoClick}
       />
       <div className="flex flex-1 overflow-hidden mt-6 mb-6">
         {isLoggedIn && userData.role !== "admin" && (
@@ -264,11 +279,11 @@ function App() {
         )}
         <main className="flex-1 p-6 overflow-y-auto bg-white flex items-center justify-center">
           <div className="w-full">
-            <h1 className="font-bold text-xl text-stone-500 mb-2">
-              {isLoggedIn && `Welcome back to your garage, ${userData?.name.split(" ")[0] || ""}!`}
+            <h1 className="font-bold text-xl text-stone-500 mb-2"> 
+              {isLoggedIn && carsState.selectedCarId == undefined && carsState.selectedCarId == null && `Welcome back to your garage, ${userData?.name.split(" ")[0] || ""}!`}
             </h1>
             <p className="mb-6 font-light text-stone-400">
-              {isLoggedIn && "Manage cars and see progress here"}
+              {isLoggedIn && carsState.selectedCarId == undefined && carsState.selectedCarId == null && "Manage cars and see progress here"}
             </p>
             {content}
           </div>
