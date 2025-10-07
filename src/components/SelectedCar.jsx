@@ -60,7 +60,7 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
       ) : (
         <>
           <span className={statusClasses}>{car.status}</span>
-          <header className="pb-4 mt-8 mb-4 border-b-2 border-stone-300">
+          <header className="pb-4 mt-8 mb-4">
             <div className="flex items-center justify-between">
               <h1 className="text-3xl font-bold text-stone-600 mb-2">
                 {car.year} {car.make} {car.model}
@@ -80,13 +80,19 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
                 </button>
               </div>
             </div>
-            <p className="mb-4 text-stone-950">License: {car.license}</p>
-            <p className="text-stone-950 whitespace-pre-wrap">
+            <p className="mb-4 text-stone-200 text-sm">{car.license}</p>
+            </header>
+            <div className = "flex flex-col">
+              <div className = "mb-8">
+              <h1 className="text-xl font-bold text-stone-100 pb-4 mt-8 mb-4 border-b-2 border-stone-300">Repair Concerns</h1>
+            <p className = "text-stone-100"> 
               {car.repairConcerns}
             </p>
-          </header>
-
-          <h2 className="text-xl font-bold mb-4 text-stone-100">
+            </div>
+         
+      
+          <div>
+          <h2 className="text-xl font-bold text-stone-100 pb-4 mt-8 mb-4 border-b-2 border-stone-300">
             Technician Comments
           </h2>
 
@@ -131,6 +137,8 @@ export default function SelectedCar({ car, onDeleteCar, onEditCar, user }) {
               {technicianComments || "No comments available."}
             </p>
           )}
+             </div>
+             </div>
         </>
       )}
     </div>

@@ -50,8 +50,8 @@ export default function Login({onLogin, onSignUpClick}){
     let labelClasses = "mb-1 font-light text-sm text-stone-800"
     let inputClasses = "mb-6 p-1 bg-stone-200 border-b-1 border-stone-400 text-stone-800 outline-none"
     return(
-        <div flex flex-col >
-        <div className = "p-10 h-60 w-full bg-linear-to-r from-stone-600 to-stone-800 ">
+        <div className = "flex flex-col" >
+        <div className = "flex  flex-col p-10 h-60 bg-linear-to-r from-stone-600 to-stone-800 ">
         <img src = {logo} alt = "virtual garage logo" className = "h-20 w-20 object-center"/>
         <h1 className = "text-4xl text-stone-200 font-bold mb-2">Virtual Garage</h1>
         <p className = "text-stone-300">Manage your car repair data securely and conveniently</p>
